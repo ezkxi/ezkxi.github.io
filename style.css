@@ -1,209 +1,25 @@
-<!DOCTYPE html>
+body {
+  font-family: 'Rubik', sans-serif;
+}
 
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>🌍 Trash Points Leaderboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- jQuery CDN -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <style>
-    /* Global styles */
-    body {
-      font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      margin: 0;
-      background: #f4f6f9;
-      color: #333;
-    }
+.bg-gradient {
+  background: linear-gradient(135deg, #5c5be5, #00c6ff);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-```
 main {
-  max-width: 1000px;
-  margin: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   padding: 20px;
 }
 
-/* Header */
-#header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-#header h1 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-  color: #2c3e50;
-}
-
-#searchBox {
-  width: 100%;
-  max-width: 400px;
-  padding: 10px 14px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-  transition: border 0.2s;
-}
-
-#searchBox:focus {
-  border-color: #3498db;
-}
-
-/* Table container */
-#leaderboard {
-  background: #fff;
-  border-radius: 10px;
-  overflow-x: auto;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-thead {
-  background: #3498db;
-  color: white;
-}
-
-th, td {
-  padding: 12px 16px;
-  text-align: center;
-  font-size: 0.95rem;
-}
-
-tbody tr:nth-child(even) {
-  background: #f8f9fb;
-}
-
+/* Table row hover animation */
 tbody tr:hover {
-  background: #ecf5ff;
+  background: #eef3ff !important;
+  transform: scale(1.01);
+  transition: all 0.2s ease-in-out;
 }
-
-th {
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
-}
-
-/* Responsive */
-@media (max-width: 700px) {
-  table, thead, tbody, th, td, tr {
-    display: block;
-  }
-
-  thead {
-    display: none;
-  }
-
-  tbody tr {
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    padding: 10px;
-  }
-
-  tbody td {
-    text-align: left;
-    padding: 8px 12px;
-    border: none;
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-  }
-
-  tbody td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    color: #555;
-  }
-}
-```
-
-  </style>
-</head>
-<body>
-  <main>
-    <div id="header">
-      <h1>🌍 Trash Points Leaderboard</h1>
-      <input type="text" id="searchBox" placeholder="Search by UID or Name...">
-    </div>
-    <div id="leaderboard">
-      <table id="leaderboardTable">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>UID</th>
-            <th>Name</th>
-            <th>Section</th>
-            <th>Trash Points</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- rows injected by jQuery -->
-        </tbody>
-      </table>
-    </div>
-  </main>
-
-  <script>
-    // Public bin (read-only)
-    const BIN_ID = "68d7f447ae596e708ffdc6ec";
-    const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
-
-    function loadLeaderboard() {
-      $.ajax({
-        url: URL,
-        method: "GET",
-        success: function(response) {
-          let data = response.record;
-          let entries = Object.entries(data);
-
-          // Sort by points (descending)
-          entries.sort((a, b) => b[1].points - a[1].points);
-
-          // Populate table
-          let tbody = $("#leaderboardTable tbody");
-          tbody.empty();
-
-          $.each(entries, function(index, [uid, info]) {
-            let row = `
-              <tr>
-                <td data-label="Rank">${index + 1}</td>
-                <td data-label="UID">${uid}</td>
-                <td data-label="Name">${info.name}</td>
-                <td data-label="Section">${info.section}</td>
-                <td data-label="Points">${info.points}</td>
-              </tr>
-            `;
-            tbody.append(row);
-          });
-        },
-        error: function(xhr) {
-          console.error("Error fetching data:", xhr);
-          $("#leaderboardTable tbody").html("<tr><td colspan='5'>Failed to load data.</td></tr>");
-        }
-      });
-    }
-
-    $(document).ready(function() {
-      // Load leaderboard on page load
-      loadLeaderboard();
-
-      // Search filter
-      $("#searchBox").on("input", function() {
-        let filter = $(this).val().toLowerCase();
-        $("#leaderboardTable tbody tr").each(function() {
-          let text = $(this).text().toLowerCase();
-          $(this).toggle(text.includes(filter));
-        });
-      });
-    });
-  </script>
-
-</body>
-</html>
