@@ -32,30 +32,43 @@
   </main>
 
   <script>
+    const API_KEY = "$2a$10$6AJKoWpIqGulLRIRVmEPsOFjiUXFNyoQ5LWUBt3ChrXpqaWoriva2";
+    const BIN_ID = "68d7f1ec43b1c97be9520b81";
+    const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
+
     $(document).ready(function() {
-      // Load JSON data
-      $.getJSON("data.json", function(data) {
-        let entries = Object.entries(data);
+      // Load JSON from jsonbin.io
+      $.ajax({
+        url: URL,
+        method: "GET",
+        headers: { "X-Master-Key": API_KEY },
+        success: function(response) {
+          let data = response.record;
+          let entries = Object.entries(data);
 
-        // Sort by points descending
-        entries.sort((a, b) => b[1].points - a[1].points);
+          // Sort by points descending
+          entries.sort((a, b) => b[1].points - a[1].points);
 
-        // Populate table
-        let tbody = $("#leaderboardTable tbody");
-        tbody.empty();
+          // Populate table
+          let tbody = $("#leaderboardTable tbody");
+          tbody.empty();
 
-        $.each(entries, function(index, [uid, info]) {
-          let row = `
-            <tr>
-              <td>${index + 1}</td>
-              <td>${uid}</td>
-              <td>${info.name}</td>
-              <td>${info.section}</td>
-              <td>${info.points}</td>
-            </tr>
-          `;
-          tbody.append(row);
-        });
+          $.each(entries, function(index, [uid, info]) {
+            let row = `
+              <tr>
+                <td>${index + 1}</td>
+                <td>${uid}</td>
+                <td>${info.name}</td>
+                <td>${info.section}</td>
+                <td>${info.points}</td>
+              </tr>
+            `;
+            tbody.append(row);
+          });
+        },
+        error: function(xhr) {
+          console.error("Error fetching data:", xhr);
+        }
       });
 
       // Search filter
