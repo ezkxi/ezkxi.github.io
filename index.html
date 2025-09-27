@@ -32,17 +32,14 @@
   </main>
 
   <script>
-    // JSONBin credentials
-    const API_KEY = "$2a$10$sbJRnG/.C1CQIONF.h5qQuB3f1266FBqS3.OMJ0TZfDLwJPkr.DMy";
-    const BIN_ID = "68d7f37843b1c97be9520c7a";
+    // Public bin (read-only, safe for GitHub Pages)
+    const BIN_ID = "68d7f447ae596e708ffdc6ec";
     const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
 
-    // Function to load leaderboard
     function loadLeaderboard() {
       $.ajax({
         url: URL,
         method: "GET",
-        headers: { "X-Master-Key": API_KEY },
         success: function(response) {
           let data = response.record;
           let entries = Object.entries(data);
