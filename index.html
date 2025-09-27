@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Trash Points Leaderboard</title>
+  <title>🌍 Trash Points Leaderboard</title>
   <link rel="stylesheet" href="style.css">
   <!-- jQuery CDN -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -32,12 +32,13 @@
   </main>
 
   <script>
+    // JSONBin credentials
     const API_KEY = "$2a$10$6AJKoWpIqGulLRIRVmEPsOFjiUXFNyoQ5LWUBt3ChrXpqaWoriva2";
     const BIN_ID = "68d7f1ec43b1c97be9520b81";
     const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
 
-    $(document).ready(function() {
-      // Load JSON from jsonbin.io
+    // Function to load leaderboard
+    function loadLeaderboard() {
       $.ajax({
         url: URL,
         method: "GET",
@@ -46,7 +47,7 @@
           let data = response.record;
           let entries = Object.entries(data);
 
-          // Sort by points descending
+          // Sort by points (descending)
           entries.sort((a, b) => b[1].points - a[1].points);
 
           // Populate table
@@ -68,8 +69,14 @@
         },
         error: function(xhr) {
           console.error("Error fetching data:", xhr);
+          $("#leaderboardTable tbody").html("<tr><td colspan='5'>Failed to load data.</td></tr>");
         }
       });
+    }
+
+    $(document).ready(function() {
+      // Load leaderboard on page load
+      loadLeaderboard();
 
       // Search filter
       $("#searchBox").on("input", function() {
