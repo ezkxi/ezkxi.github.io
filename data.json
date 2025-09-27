@@ -1,0 +1,7 @@
+{
+  "UID1234": { "name": "Ana Santos", "section": "BSIT 3A", "points": 10 },
+  "UID5678": { "name": "Prince Dela Cruz", "section": "BSIT 3B", "points": 25 },
+  "UID9999": { "name": "Marco Reyes", "section": "BSIT 3A", "points": 15 },
+  "UIDABCD": { "name": "Liza Ramos", "section": "BSIT 3C", "points": 40 },
+  "UIDWXYZ": { "name": "Joey Villanueva", "section": "BSIT 3B", "points": 5 }
+}
