@@ -1,1 +1,72 @@
-<h1> ISHI PA</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trash Points Leaderboard</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <main>
+    <div id="header">
+      <h1>🌍 Trash Points Leaderboard</h1>
+      <input type="text" id="searchBox" placeholder="Search by UID or Name...">
+    </div>
+    <div id="leaderboard">
+      <table id="leaderboardTable">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>UID</th>
+            <th>Name</th>
+            <th>Section</th>
+            <th>Trash Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- rows injected by jQuery -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    $(document).ready(function() {
+      // Load JSON data
+      $.getJSON("data.json", function(data) {
+        let entries = Object.entries(data);
+
+        // Sort by points descending
+        entries.sort((a, b) => b[1].points - a[1].points);
+
+        // Populate table
+        let tbody = $("#leaderboardTable tbody");
+        tbody.empty();
+
+        $.each(entries, function(index, [uid, info]) {
+          let row = `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${uid}</td>
+              <td>${info.name}</td>
+              <td>${info.section}</td>
+              <td>${info.points}</td>
+            </tr>
+          `;
+          tbody.append(row);
+        });
+      });
+
+      // Search filter
+      $("#searchBox").on("input", function() {
+        let filter = $(this).val().toLowerCase();
+        $("#leaderboardTable tbody tr").each(function() {
+          let text = $(this).text().toLowerCase();
+          $(this).toggle(text.includes(filter));
+        });
+      });
+    });
+  </script>
+</body>
+</html>
